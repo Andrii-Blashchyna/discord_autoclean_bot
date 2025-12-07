@@ -1,7 +1,16 @@
 // index.js
 import { Client, GatewayIntentBits, PermissionsBitField, ChannelType } from "discord.js";
 import dotenv from "dotenv";
+import express from "express";
 dotenv.config();
+
+// ----------- KEEP ALIVE (Replit 24/7) -----------
+const app = express();
+app.get("/", (req, res) => {
+    res.send("Bot is running!");
+});
+app.listen(3000, () => console.log("🌐 KeepAlive server active on port 3000"));
+// ------------------------------------------------
 
 const TOKEN = process.env.TOKEN;
 const CHANNEL_ID = process.env.CHANNEL_ID;
@@ -44,7 +53,6 @@ client.on("messageCreate", async (message) => {
             const messagesWithReactions = messages.filter(msg => msg.reactions.cache.size > 0);
             const totalMessages = messagesWithReactions.size;
 
-            // Паралельне видалення реакцій
             const deletePromises = messagesWithReactions.map(msg => 
                 msg.reactions.removeAll().catch(err => {
                     console.log(`Помилка видалення реакцій у повідомленні ${msg.id}:`, err.message);
@@ -53,10 +61,8 @@ client.on("messageCreate", async (message) => {
 
             await Promise.all(deletePromises);
 
-            // Відповідь бота
-            const reply = await message.reply(`✅ Очищено реакції шайтан машиною Блащини з **${totalMessages} повідомлень**  у каналі!`);
+            const reply = await message.reply(`✅ Очищено реакції шайтан машиною Блащини з **${totalMessages} повідомлень** у каналі!`);
 
-            // Видалення повідомлення через 20 секунд
             setTimeout(() => {
                 reply.delete().catch(err => console.log("Не вдалося видалити повідомлення:", err.message));
             }, 20000);
