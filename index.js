@@ -1,23 +1,14 @@
 // index.js
 import { Client, GatewayIntentBits, PermissionsBitField, ChannelType } from "discord.js";
 import dotenv from "dotenv";
-import express from "express";
 dotenv.config();
-
-// ----------- KEEP ALIVE (Replit 24/7) -----------
-const app = express();
-app.get("/", (req, res) => {
-    res.send("Bot is running!");
-});
-app.listen(3000, () => console.log("🌐 KeepAlive server active on port 3000"));
-// ------------------------------------------------
 
 const TOKEN = process.env.TOKEN;
 const CHANNEL_ID = process.env.CHANNEL_ID;
 const ROLE_ID = process.env.ROLE_ID;
 
 if (!TOKEN || !CHANNEL_ID || !ROLE_ID) {
-    console.error("❌ Перевірте .env файл");
+    console.error("❌ Перевірте змінні середовища (Secrets) в Replit");
     process.exit(1);
 }
 
